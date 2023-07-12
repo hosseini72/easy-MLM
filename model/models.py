@@ -85,7 +85,113 @@ class LogRegression(Model):
     
 class SVCModel(Model):
     '''
+    This class implement different kernels of SVC.
+    The Kernel is: {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
+    Below text is from sklean.svm.SVC help
     
+    C-Support Vector Classification.
+
+    The implementation is based on libsvm. The fit time scales at least
+    quadratically with the number of samples and may be impractical
+    beyond tens of thousands of samples. For large datasets
+    consider using :class:`~sklearn.svm.LinearSVC` or
+    :class:`~sklearn.linear_model.SGDClassifier` instead, possibly after a
+    :class:`~sklearn.kernel_approximation.Nystroem` transformer.
+
+    The multiclass support is handled according to a one-vs-one scheme.
+
+    For details on the precise mathematical formulation of the provided
+    kernel functions and how `gamma`, `coef0` and `degree` affect each
+    other, see the corresponding section in the narrative documentation:
+    :ref:`svm_kernels`.
+
+    Read more in the :ref:`User Guide <svm_classification>`.
+
+    Parameters
+    ----------
+    C : float, default=1.0
+
+    kernel : {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'} or callable,  \
+
+
+    degree : int, default=3
+
+    gamma : {'scale', 'auto'} or float, default='scale'
+
+
+    coef0 : float, default=0.0
+
+
+    shrinking : bool, default=True
+
+
+    probability : bool, default=False
+
+
+    tol : float, default=1e-3
+
+
+    cache_size : float, default=200
+
+
+    class_weight : dict or 'balanced', default=None
+
+
+    verbose : bool, default=False
+
+
+    max_iter : int, default=-1
+        Hard limit on iterations within solver, or -1 for no limit.
+
+    decision_function_shape : {'ovo', 'ovr'}, default='ovr'
+
+
+    break_ties : bool, default=False
+
+    random_state : int, RandomState instance or None, default=None
+
+    Attributes
+    ----------
+    class_weight_ : ndarray of shape (n_classes,)
+
+
+    classes_ : ndarray of shape (n_classes,)
+
+
+    coef_ : ndarray of shape (n_classes * (n_classes - 1) / 2, n_features)
+
+
+    dual_coef_ : ndarray of shape (n_classes -1, n_SV)
+
+
+    fit_status_ : int
+
+
+    intercept_ : ndarray of shape (n_classes * (n_classes - 1) / 2,)
+
+
+    n_features_in_ : int
+
+
+    feature_names_in_ : ndarray of shape (`n_features_in_`,)
+
+
+    support_ : ndarray of shape (n_SV)
+
+
+    support_vectors_ : ndarray of shape (n_SV, n_features)
+
+
+    n_support_ : ndarray of shape (n_classes,), dtype=int32
+
+
+    probA_ : ndarray of shape (n_classes * (n_classes - 1) / 2)
+    probB_ : ndarray of shape (n_classes * (n_classes - 1) / 2)
+
+
+    shape_fit_ : tuple of int of shape (n_dimensions_of_X,)
+        Array dimensions of training vector ``X``.
+
     '''
     def __init__(self, model_dir) -> None:
         super().__init__()
@@ -93,8 +199,7 @@ class SVCModel(Model):
         self.config= iter(SVCConfi)
         self.model_dir= model_dir
 
-    def _Model__make_model(self):
-        pass
-
-
+    def _Model__make_model(self,conf, X_train, y_train):
+        self.mdl= SVC(kernel= conf['kernel'], degree= conf['degree'], gamma= conf['gamma'])
+        return self.mdl.fit(X_train, y_train)
 

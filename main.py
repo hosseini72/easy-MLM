@@ -1,4 +1,4 @@
-from model.models import LogRegression
+from model.models import *
 from model.dtsets import Iris
 import os
 
@@ -6,7 +6,7 @@ class MLM:
     def __init__(self):
         self.base_dir= os.getcwdb().decode()
         self.__make_main_dir()
-        self.models= [LogRegression,]
+        self.models= [LogRegression, SVCModel]
 
     def __make_main_dir(self):
         self.path= os.path.join(self.base_dir, 'trained_models')

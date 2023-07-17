@@ -1,24 +1,25 @@
 from model.models import *
 from model.dtsets import Iris
 import os
+from random import choice
 
-class MLM:
+class Train:
     def __init__(self):
-        self.base_dir= os.getcwdb().decode()
+        self.__base_dir= os.getcwdb().decode()
         self.__make_main_dir()
-        self.models= [LogRegression, SVCModel]
+        self.__models= [LogRegression, SVCModel, DTModel, NBModel, MLPClassifierModel, KNNModle]
 
     def __make_main_dir(self):
-        self.path= os.path.join(self.base_dir, 'trained_models')
+        self.__models_path= os.path.join(self.__base_dir, 'trained_models')
         try:
-            os.mkdir(self.path)
+            os.mkdir(self.__models_path)
         except FileExistsError:
             counter= 1
             while True:
                 counter+= 1
                 try:
-                    self.path= os.path.join(self.base_dir, f'trained_models_{counter}')
-                    os.mkdir(self.path)
+                    self.__models_path= os.path.join(self.__base_dir, f'trained_models_{counter}')
+                    os.mkdir(self.__models_path)
                 except FileExistsError:
                     pass
                 else:
@@ -26,8 +27,8 @@ class MLM:
         except Exception as err:
             print(err)
             
-    def __make_model_dir(self, model): # model= class.__name__
-        model_dir= os.path.join(self.path, model.__name__)
+    def __make_model_dir(self, model): 
+        model_dir= os.path.join(self.__models_path, model.__name__)
         os.mkdir(model_dir)
         return model_dir
 
@@ -40,28 +41,42 @@ class MLM:
 
 
     def fit(self):
-
-        for model in self.models:
+        ''' fit() trains all models and their configs once and save a pickled file in each model directory.'''
+        for model in self.__models:
             self.__run_single_model(model=model)
+    
+    def fit_one(self, model= None):
+        if not model:
+            model= choice(self.__models)
+        self.__run_single_model(model=model)
 
-    def predict(self):
-        pass
+    @property
+    def models(self):
+        models= [mdl.__name__ for mdl in self.__models]
+        return models
+    
+    @models.setter
+    def models(self, item):
+        raise Exception('These models are permanents and can not be changed. To run espesific model fit_one(model_name) can be used.')
 
-    def score(self):
-        pass
+    @models.deleter
+    def models(self):
+        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) can be used.')
 
-    def confusion(self):
-        pass
+    @property
+    def path(self):
+        return self.__models_path
+    
+    @path.setter
+    def path(self, new_dir):
+        if os.path.isdir(new_dir):
+            self.__base_dir= new_dir
+        else:
+            raise Exception('These models are permanents and can not be changed. To run espesific model fit_one(model_name) can be used.')
 
-
-        
-#TODO before calling any model should the directory should be created
-# ob= Log_Regression()
-# ob.train()
-
-
-ob= MLM()
-ob.fit()
+    @path.deleter
+    def path(self):
+        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) can be used.')
 
 
 
@@ -70,3 +85,37 @@ from mlxtend.plotting import plot_decision_regions
 plot_decision_regions(xtr, ytr, clf= ir, legend =2 )
 
 '''
+
+class Test:
+    def __init__(self, dir) -> None:
+        self.__path= dir
+        self.__models_dir_list= iter(os.listdir(self.__path))
+
+    @property
+    def __model_directory(self):
+        return next(self.__models_dir_list)
+
+    def __trained_models(self, model):
+        self.__trained_model_dir= os.path.join(self.__path, model)
+        self.__trained_configs_list=  os.listdir(self.__trained_model_dir)
+        print(self.__models_dir_list)
+        print(self.__trained_model_dir)
+        print(self.__trained_configs_list)
+        
+
+    def score(self):
+        mdl= self.__model_directory
+        self.__trained_models(mdl)
+
+    def score_train(self):
+        pass
+
+    def confusion(self):
+        pass
+
+# tr= Train()
+# tr.fit()
+# print(tr.path)
+path= 'N:\MLM\trained_models'
+te= Test(path)
+te.score()

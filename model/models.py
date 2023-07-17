@@ -1,5 +1,4 @@
 from sklearn.linear_model import LogisticRegression
-from model.config import LogRegressionConfig, SVCConfi
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -267,7 +266,6 @@ class MLPClassifierModel(Model):
     Attributes
     ----------
     classes_ : ndarray or list of ndarray of shape (n_classes,)
-        Class labels for each output.
     loss_ : float
         The current loss computed with the loss function.
     best_loss_ : float
@@ -303,7 +301,8 @@ class MLPClassifierModel(Model):
     def _Model__make_model(self,conf, X_train, y_train):
         self.mdl= MLPClassifier(**conf)
         return self.mdl.fit(X_train, y_train)
-    
+
+
 class KNNModle(Model):
     '''
     Classifier implementing the k-nearest neighbors vote.
@@ -311,52 +310,13 @@ class KNNModle(Model):
     Parameters
     ----------
     n_neighbors : int, default=5
-        Number of neighbors to use by default for :meth:`kneighbors` queries.
     weights : {'uniform', 'distance'} or callable, default='uniform'
-        Weight function used in prediction.  Possible values:
-        - 'uniform' : uniform weights.  All points in each neighborhood
-          are weighted equally.
-        - 'distance' : weight points by the inverse of their distance.
-          in this case, closer neighbors of a query point will have a
-          greater influence than neighbors which are further away.
-        - [callable] : a user-defined function which accepts an
-          array of distances, and returns an array of the same shape
-          containing the weights.
     algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
-        Algorithm used to compute the nearest neighbors:
-        - 'ball_tree' will use :class:`BallTree`
-        - 'kd_tree' will use :class:`KDTree`
-        - 'brute' will use a brute-force search.
-        - 'auto' will attempt to decide the most appropriate algorithm
-          based on the values passed to :meth:`fit` method.
-        Note: fitting on sparse input will override the setting of
-        this parameter, using brute force.
    leaf_size : int, default=30
-        Leaf size passed to BallTree or KDTree.  This can affect the
-        speed of the construction and query, as well as the memory
-        required to store the tree.  The optimal value depends on the
-        nature of the problem.
     p : int, default=2
-        Power parameter for the Minkowski metric. When p = 1, this is
-        equivalent to using manhattan_distance (l1), and euclidean_distance
-        (l2) for p = 2. For arbitrary p, minkowski_distance (l_p) is used.
     metric : str or callable, default='minkowski'
-        The distance metric to use for the tree.  The default metric is
-        minkowski, and with p=2 is equivalent to the standard Euclidean
-        metric. For a list of available metrics, see the documentation of
-        :class:`~sklearn.metrics.DistanceMetric`.
-        If metric is "precomputed", X is assumed to be a distance matrix and
-        must be square during fit. X may be a :term:`sparse graph`,
-        in which case only "nonzero" elements may be considered neighbors.
-    metric_params : dict, default=None
-        Additional keyword arguments for the metric function.
-    n_jobs : int, default=None
-        The number of parallel jobs to run for neighbors search.
-        ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
-        ``-1`` means using all processors. See :term:`Glossary <n_jobs>`
-        for more details.
-        Doesn't affect :meth:`fit` method.
-    Attributes
+     n_jobs : int, default=None
+
     ----------
     classes_ : array of shape (n_classes,)
         Class labels known to the classifier

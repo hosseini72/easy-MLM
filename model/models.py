@@ -6,7 +6,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 
-from model.config import *
+from model.Config import *
 from model.dtsets import Iris
 import pickle
 import os
@@ -17,8 +17,8 @@ from abc import ABC, abstractmethod
 
 class Model(ABC):
 
-    def __init__(self) -> None:
-        self.dataset= Iris().dataset
+    def __init__(self, dataset) -> None:
+        self.dataset= dataset
      
     def __configure(self):
         config= next(self.config)
@@ -77,12 +77,11 @@ class LogRegression(Model):
     multi_class: {'auto', 'ovr', 'multinomial'}
     '''
 
-    def __init__(self, model_dir) -> None:
-        super().__init__()
+    def __init__(self, model_dir, dataset) -> None:
+        super().__init__(dataset= dataset)
         self.config_list= LogRegressionConfig.__members__
         self.config= iter(LogRegressionConfig)
         self.model_dir= model_dir
-        self.dataset= Iris().dataset
      
     
     def _Model__make_model(self,conf, X_train, y_train):
@@ -134,8 +133,8 @@ class SVCModel(Model):
         Array dimensions of training vector ``X``.
     '''
 
-    def __init__(self, model_dir) -> None:
-        super().__init__()
+    def __init__(self, model_dir, dataset) -> None:
+        super().__init__(dataset= dataset)
         self.config_list= SVCConfig.__members__
         self.config= iter(SVCConfig)
         self.model_dir= model_dir
@@ -175,8 +174,8 @@ class DTModel(Model):
     tree_ : Tree instance
     '''
 
-    def __init__(self, model_dir) -> None:
-        super().__init__()
+    def __init__(self, model_dir, dataset) -> None:
+        super().__init__(dataset= dataset)
         self.config_list= DTConfig.__members__
         self.config= iter(DTConfig)
         self.model_dir= model_dir
@@ -221,8 +220,8 @@ class NBModel(Model):
         mean of each feature per class.
     '''
 
-    def __init__(self, model_dir) -> None:
-        super().__init__()
+    def __init__(self, model_dir, dataset) -> None:
+        super().__init__(dataset= dataset)
         self.config_list= NBConfig.__members__
         self.config= iter(NBConfig)
         self.model_dir= model_dir
@@ -292,8 +291,8 @@ class MLPClassifierModel(Model):
     out_activation_ : str
         Name of the output activation function.
     '''
-    def __init__(self, model_dir) -> None:
-        super().__init__()
+    def __init__(self, model_dir, dataset) -> None:
+        super().__init__(dataset= dataset)
         self.config_list= MLPCConfig.__members__
         self.config= iter(MLPCConfig)
         self.model_dir= model_dir
@@ -341,14 +340,14 @@ class KNNModle(Model):
         otherwise True.
     '''
 
-    def __init__(self, model_dir) -> None:
-        super().__init__()
+    def __init__(self, model_dir, dataset) -> None:
+        super().__init__(dataset= dataset)
         self.config_list= KNNConfig.__members__
         self.config= iter(KNNConfig)
         self.model_dir= model_dir
 
     def _Model__make_model(self,conf, X_train, y_train):
-        self.mdl= MLPClassifier(**conf)
+        self.mdl= KNeighborsClassifier(**conf)
         return self.mdl.fit(X_train, y_train)
     
 

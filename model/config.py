@@ -34,12 +34,12 @@ class NBConfig(Enum):
 
 
 class KNNConfig(Enum):
-    ONE= {'n_neighbors': "3", 'weights': 'uniform', 'algorithm': "auto"},
-    TWO= {'n_neighbors': "4", 'weights': 'uniform', 'algorithm': "auto"},
-    THREE= {'n_neighbors': "5", 'weights': 'uniform', 'algorithm': "auto"},
-    FOUR= {'n_neighbors': "3", 'weights': 'distance', 'algorithm': "auto"},
-    FIVE= {'n_neighbors': "4", 'weights': 'distance', 'algorithm': "auto"},
-    SIX= {'n_neighbors': "5", 'weights': 'distance', 'algorithm': "auto"},
+    ONE= {'n_neighbors':3, 'weights': 'uniform', 'algorithm': "auto"},
+    TWO= {'n_neighbors': 4, 'weights': 'uniform', 'algorithm': "auto"},
+    THREE= {'n_neighbors': 5, 'weights': 'uniform', 'algorithm': "auto"},
+    FOUR= {'n_neighbors': 3, 'weights': 'distance', 'algorithm': "auto"},
+    FIVE= {'n_neighbors': 4, 'weights': 'distance', 'algorithm': "auto"},
+    SIX= {'n_neighbors': 5, 'weights': 'distance', 'algorithm': "auto"},
 
 
 

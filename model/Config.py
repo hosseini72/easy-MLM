@@ -12,14 +12,15 @@ class LogRegressionConfig(Enum):
     EIGHT= {'solver': "newton-cg", 'penalty': "l2", 'multi_class': "auto"},
 
 
+
    
           
 class SVCConfig(Enum):
-    ONE= {'kernel': "linear", 'degree': 3, 'gamma': "auto"},
-    TWO= {'kernel': "poly", 'degree': 3, 'gamma': "scale"},
-    THREE= {'kernel': "rbf", 'degree': 3, 'gamma': "scale"},
-    FOUR=  {'kernel': "sigmoid", 'degree': 3, 'gamma': "scale"},
-    FIVE=  {'kernel': "precomputed", 'degree': 3, 'gamma': "auto"}
+    ONE= {'kernel': "linear", 'degree': 3, 'gamma': "auto", 'probability': True},
+    TWO= {'kernel': "poly", 'degree': 3, 'gamma': "scale", 'probability': True},
+    THREE= {'kernel': "rbf", 'degree': 3, 'gamma': "scale", 'probability': True},
+    FOUR=  {'kernel': "sigmoid", 'degree': 3, 'gamma': "scale", 'probability': True},
+    FIVE=  {'kernel': "precomputed", 'degree': 3, 'gamma': "auto", 'probability': True}
 
 
 class DTConfig(Enum):

@@ -3,22 +3,39 @@ from sklearn.datasets import make_classification
 
 
 
+def split_dataset(dataset):
+    pass
+# trainX, testX, trainy, testy = train_test_split(X, y, test_size=0.3, random_state=1)
 
-def dt():
-    return load_iris(return_X_y= True)
 
+class DataSet:
 
-class Iris:
+    def test_train(self):
+        ''' 
+        Splits data set to test and train 
+        '''
+        pass
 
     @property
-    def dataset(self):
+    def train_dataset(self):
         # X, y= load_iris(return_X_y= True)
         # print(X)
         # result= {'X_train': X, 'y_train':y}
-        iris = load_iris()
-        data = iris.data
-        target = iris.target
+        iris= load_iris()
+        data= iris.data
+        target= iris.target
+        target[target==2] = 1
+
         return data, target
+    
+    @property
+    def test_dataset(self):
+        iris= load_iris()
+        data= iris.data
+        target= iris.target
+        target[target==2] = 1
+        return data, target
+
 
 
 class Random_dataset:

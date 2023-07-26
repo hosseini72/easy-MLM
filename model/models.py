@@ -7,7 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 
 from model.Config import *
-from model.dtsets import Iris
+from model.dtsets import DataSet
 import pickle
 import os
 from abc import ABC, abstractmethod

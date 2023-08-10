@@ -6,8 +6,8 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 
-from model.Config import *
-from model.dtsets import DataSet
+from model.Config import *  # noqa: F403
+# from model.dtsets import DataSet
 import pickle
 import os
 from abc import ABC, abstractmethod
@@ -79,8 +79,8 @@ class LogRegression(Model):
 
     def __init__(self, model_dir, dataset) -> None:
         super().__init__(dataset= dataset)
-        self.config_list= LogRegressionConfig.__members__
-        self.config= iter(LogRegressionConfig)
+        self.config_list= LogRegressionConfig.__members__  # noqa: F405
+        self.config= iter(LogRegressionConfig)  # noqa: F405
         self.model_dir= model_dir
      
     
@@ -100,7 +100,7 @@ class SVCModel(Model):
     Parameters
     ----------
     C : float, default=1.0
-    kernel : {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'} or callable,  \
+    kernel : {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'} or callable,  
     degree : int, default=3
     gamma : {'scale', 'auto'} or float, default='scale'
     coef0 : float, default=0.0

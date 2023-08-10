@@ -21,7 +21,11 @@ class Train:
         self.__base_dir= os.getcwdb().decode()
         self.__make_main_dir()
         self.__models= [LogRegression, SVCModel, DTModel, NBModel, MLPClassifierModel, KNNModle]
-        self.dataset= DataSet().train_dataset
+        self.dataset= None
+
+    def set_dataset(self, *, data_address, label_address, test_size=0.2 ):
+        dataset= DataSet(data_address, label_address, test_size)
+        self.dataset= dataset.train_dataset
 
     def __make_main_dir(self):
         self.__models_path= os.path.join(self.__base_dir, 'trained_models')
@@ -48,14 +52,18 @@ class Train:
 
 
     def __run_single_model(self, model):
+        if self.dataset is None:
+            raise ValueError('''The dataset is not provided. Please make sure to pass a 
+                             valid dataset by calling "set_dataset" method.''')
         model_dir= self.__make_model_dir(model=model)
         mdl_obj= model(model_dir, self.dataset)
         all_conf, conf_cuntr = mdl_obj.train()
         return all_conf, conf_cuntr
 
 
+
     def fit(self):
-        ''' fit() trains all models and their configs once and save a pickled file in each model directory.'''
+        ''' fit() trains all models and their configs once and save a pickled file in each model directory.'''  # noqa: E501
         for model in self.__models:
             self.__run_single_model(model=model)
     
@@ -122,7 +130,7 @@ class Evaluate:
                 mdl_configs_list= self.__trained_models(mdl)
                 # if should check that it is a directory
                 for mdl_config in mdl_configs_list:
-                    with open(f'{mdl_dir}\{str(mdl_config)}', 'br') as file:
+                    with open(f'{mdl_dir}\{str(mdl_config)}', 'br') as file:  # noqa: E999
                         trained_mdl= pickle.load(file= file)
                     result= self.__evaluate(model_name=mdl, config_name=mdl_config, model= trained_mdl)
                     result_list.append(result)
@@ -202,12 +210,19 @@ class Evaluate:
         pass
 
 
-# tr= Train()
-# tr.fit()
-# print(tr.path)
-# path= 'N:\MLM\trained_models'
-te= Evaluate(r'N:\MLM\trained_models')
-te.test()
+
+
+
+
+
+tr= Train()
+tr.set_dataset(data_address=r'O:\Second Semister\dissertation\dis-dataset\liar_dataset\train_data\Liar_bow.npz',
+              label_address=r'O:\Second Semister\dissertation\dis-dataset\liar_dataset\train_data\Liar_label.csv')  # noqa: E501
+tr.fit()
+print(tr.path)
+# path= 'N:\MLM\trained_models'8
+# te= Evaluate(r'N:\MLM\trained_models')
+# te.test()
 # print(te.data.shape, te.target.shape)
 
 

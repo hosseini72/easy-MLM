@@ -5,6 +5,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
+from scipy import sparse
 
 from model.Config import *  # noqa: F403
 # from model.dtsets import DataSet
@@ -228,6 +229,8 @@ class NBModel(Model):
 
     def _Model__make_model(self,conf, X_train, y_train):
         self.mdl= GaussianNB(**conf)
+        if isinstance(X_train, sparse._csr.csr_matrix):  # noqa: F405
+            X_train= X_train.toarray()
         return self.mdl.fit(X_train, y_train)
     
 

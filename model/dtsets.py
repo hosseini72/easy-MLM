@@ -10,20 +10,23 @@ import numpy as np
 
 
 def extention(adrs):
-    result= adrs.rsplit('.')
-    return result[-1]
+    result= str(adrs).rsplit('.')
+    return result
 
+def file_name(adrs):
+    lst= extention(adrs)[0]
+    return lst.split('\\')[-1]
 
 class DataSet:
     def __init__(self, dt_adrs, label_adrs ,  test_size) -> None:
         self.data_dir= dt_adrs
         self.label_adrs= label_adrs
         self.test_size= test_size
-        self.data_extention= extention(dt_adrs)
-        self.label_extention= extention(label_adrs)
+        self.data_extention= extention(dt_adrs)[-1]
+        self.label_extention= extention(label_adrs)[-1]
         self.split_lst= None
-        print(self.data_extention)
-        print(self.label_extention)
+        self.__dataset_name= file_name(dt_adrs)
+
 
     def __read_csv(self, addrss):
         ''' reads pandas DataFrame'''
@@ -48,6 +51,7 @@ class DataSet:
         ''' 
          loads and Splits data set to test and train 
         '''
+
         # load data 
         if self.data_extention == 'csv':
             self.data= self.__read_csv( self.data_dir)
@@ -74,15 +78,22 @@ class DataSet:
     def train_dataset(self):
         if self.split_lst is None:
             self.test_train()
-        return self.split_lst[0], self.split_lst[2]
+        data= self.split_lst[0]
+        label= self.split_lst[2].values.ravel()
+        return data, label
     
     @property
     def test_dataset(self):
         if self.split_lst is None:
             self.test_train()
-        return self.split_lst[1], self.split_lst[3]
+        data= self.split_lst[1]
+        label= self.split_lst[3].values.ravel()
+        return data, label
 
 
+    @property
+    def dataset_name(self):
+        return  self.__dataset_name
 
 # class Random_dataset:
 

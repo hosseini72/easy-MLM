@@ -16,11 +16,11 @@ class LogRegressionConfig(Enum):
    
           
 class SVCConfig(Enum):
-    ONE= {'kernel': "linear", 'degree': 3, 'gamma': "auto", 'probability': True},
-    TWO= {'kernel': "poly", 'degree': 3, 'gamma': "scale", 'probability': True},
-    THREE= {'kernel': "rbf", 'degree': 3, 'gamma': "scale", 'probability': True},
-    FOUR=  {'kernel': "sigmoid", 'degree': 3, 'gamma': "scale", 'probability': True},
-    FIVE=  {'kernel': "precomputed", 'degree': 3, 'gamma': "auto", 'probability': True}
+    ONE= {'kernel': "linear", 'degree': 3, 'gamma': "auto", 'probability': False},
+    # TWO= {'kernel': "poly", 'degree': 3, 'gamma': "scale", 'probability': False},
+    # THREE= {'kernel': "rbf", 'degree': 3, 'gamma': "scale", 'probability': False},
+    # FOUR=  {'kernel': "sigmoid", 'degree': 3, 'gamma': "scale", 'probability': False},
+    # FIVE=  {'kernel': "precomputed", 'degree': 3, 'gamma': "auto", 'probability': False}
 
 
 class DTConfig(Enum):
@@ -45,23 +45,23 @@ class KNNConfig(Enum):
 
 
 class MLPCConfig(Enum):
-    ONE= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
-    TWO= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
-    THREE= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
-    FOUR= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 110, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
-    FIVE= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
-    SIX= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
-    SEVEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
-    EGHIT= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 110, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
-    NINE= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
-    TEN= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,'learning_rate' : 'invscaling', 'learning_rate_init': 0.1},
-    ELEVEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},
-    TWELVE= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
-    THIRTEEN= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,  'learning_rate' : 'invscaling','learning_rate_init': 0.1},
-    FOURTEEN= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},
-    FIFTEEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
-    SIXTEEN= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,  'learning_rate' : 'invscaling', 'learning_rate_init': 0.1},
-    SEVENTEEN= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},
-    EGHITEEN= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
-    NINETEEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,  'learning_rate' : 'invscaling', 'learning_rate_init': 0.1},
-    TWENTY= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 110, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},
+    ONE= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
+    TWO= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
+    THREE= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
+    FOUR= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 500, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
+    FIVE= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
+    SIX= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
+    SEVEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
+    EGHIT= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 500, 'alpha': 1e-4, 'solver': 'adam', 'random_state': 1,  'learning_rate_init': 0.1},
+    NINE= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
+    TEN= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,'learning_rate' : 'invscaling', 'learning_rate_init': 0.1},
+    ELEVEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},
+    TWELVE= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
+    THIRTEEN= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,  'learning_rate' : 'invscaling','learning_rate_init': 0.1},
+    FOURTEEN= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},
+    FIFTEEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
+    SIXTEEN= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,  'learning_rate' : 'invscaling', 'learning_rate_init': 0.1},
+    SEVENTEEN= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},
+    EGHITEEN= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' : 'constant', 'learning_rate_init': 0.1},
+    NINETEEN= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1,  'learning_rate' : 'invscaling', 'learning_rate_init': 0.1},
+    TWENTY= {'hidden_layer_sizes':(8,), 'activation': 'relu', 'max_iter': 500, 'alpha': 1e-4, 'solver': 'sgd', 'random_state': 1, 'learning_rate' :  'adaptive', 'learning_rate_init': 0.1},

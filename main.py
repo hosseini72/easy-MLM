@@ -19,7 +19,7 @@ This package can be helpful for model selection
 class Train:
     def __init__(self):
         self.__base_dir= os.getcwdb().decode()
-        self.__models= [LogRegression, DTModel, MLPClassifierModel, KNNModle]#  NBModel, , SVCModel] # noqa: E501
+        self.__models= [LogRegression, DTModel, MLPClassifierModel, KNNModle,  NBModel, SVCModel] # noqa: E501
         self.dataset= None
 
     def set_dataset(self, *, data_address, label_address, test_size=0.2 ):
@@ -137,9 +137,9 @@ class Evaluate:
                 mdl_configs_list= self.__trained_models(mdl)
                 # if should check that it is a directory
                 for mdl_config in mdl_configs_list:
-                    with open(f'{mdl_dir}\{str(mdl_config)}', 'br') as file:  # noqa: E999
+                    with open(f'{mdl_dir}\{str(mdl_config)}', 'br') as file: # noqa:E999
                         trained_mdl= pickle.load(file= file)
-                    result= self.__evaluate(model_name=mdl, config_name=mdl_config, model= trained_mdl)
+                    result= self.__evaluate(model_name=mdl, config_name=mdl_config, model= trained_mdl)  # noqa: E501
                     result_list.append(result)
                 # else:
                 #     print('mdl changed from ', mdl)
@@ -147,10 +147,16 @@ class Evaluate:
                 break
         evaluation_df= pd.DataFrame(result_list)
         print(self.__path)
-        evaluation_df.to_csv(f'{self.__path}\MLM.csv')
+        evaluation_df.to_csv(f'{self.__path}\MLM.csv')  #TODO \MLM.csv to >> {mdl}.csv
         return evaluation_df
 
     def __evaluate(self, model_name, config_name, model):
+        ##### tempory 
+        if isinstance(model,GaussianNB) and isinstance(self.data, sparse._csr.csr_matrix):  # noqa: F405
+            print('we are going to change the data')
+            self.data= self.data.toarray()
+            print('we changed the data')
+
         true_labels= self.target 
         predicted_labels= model.predict(self.data)
         predicted_probabilities= model.predict_proba(self.data)
@@ -219,8 +225,6 @@ class Evaluate:
 
 
 
-# [LogRegression, DTModel, NBModel, MLPClassifierModel, KNNModle ]
-
 def run(data_addr,  dataset_lst, label_dt):
     for dataset in dataset_lst:
         dt_adrs= os.path.join(data_addr, dataset)
@@ -230,7 +234,7 @@ def run(data_addr,  dataset_lst, label_dt):
         tr= Train()
         tr.set_dataset(data_address= dt_adrs,
                     label_address=lbl_adrs)  # noqa: E501
-        tr.fit()
+        tr.fit_one(SVCModel)
         obj= tr.dataset_obj
         dt_name= obj.dataset_name
         mdl_adr= os.path.join(r'N:\MLM', dt_name)
@@ -243,43 +247,43 @@ def run(data_addr,  dataset_lst, label_dt):
 
 
 g_lst= [
-    #'gossipcop_bow.npz',
-    #'gossipcop_one_gram.npz',
-    #'gossipcop_bigram.npz',
-    #'gossipcop_trigram.npz',
-    #'gossipcop_one_to_trigram.npz',
-    #'gossipcop_TFIDF.npz',
-    #'gossipcop_W2V.npz',
-    #'gossipcop_bow_w2v.npz',
-    #'gossipcop_enhanc_bow_w2v.npz',
-    #'gossipcop_TFIDF_w2v.npz',
-    #'gossipcop_enhance_TFIDF_w2v.npz'
+    # 'gossipcop_bow.npz',
+    # 'gossipcop_one_gram.npz',
+    # 'gossipcop_bigram.npz',
+    # 'gossipcop_trigram.npz',
+    # 'gossipcop_one_to_trigram.npz',
+    # 'gossipcop_TFIDF.npz',
+    # 'gossipcop_W2V.npz',
+    # 'gossipcop_bow_w2v.npz',
+    # 'gossipcop_enhanc_bow_w2v.npz',
+    # 'gossipcop_TFIDF_w2v.npz',
+    # 'gossipcop_enhance_TFIDF_w2v.npz'
  ]
  
 p_lst=[
-    #'PolitiFact_bow.npz',
-    #'PolitiFact_one_gram.npz',
-    #'PolitiFact_bigram.npz',
-    #'PolitiFact_trigram.npz',
-    #'PolitiFact_one_to_trigram.npz',
-    #'PolitiFact_TFIDF.npz',
-    #'PolitiFact_W2V.npz',
-    #'PolitiFact_bow_w2v.npz',
-    #'PolitiFact_enhanc_bow_w2v.npz',
-    #'PolitiFact_TFIDF_w2v.npz',
-    #'PolitiFact_enhance_TFIDF_w2v.npz'
+    # 'PolitiFact_bow.npz',
+    # 'PolitiFact_one_gram.npz',
+    # 'PolitiFact_bigram.npz',
+    # 'PolitiFact_trigram.npz',
+    # 'PolitiFact_one_to_trigram.npz', # till here has svm
+#     'PolitiFact_TFIDF.npz', # no svm
+#     'PolitiFact_W2V.npz',
+#     'PolitiFact_bow_w2v.npz',
+#     'PolitiFact_enhanc_bow_w2v.npz',
+#     'PolitiFact_TFIDF_w2v.npz',
+#     'PolitiFact_enhance_TFIDF_w2v.npz'
  ]
 L_lst= [
-   # 'Liar_bow.npz',
-   # 'Liar_one_gram.npz',
-    'Liar_bigram.npz',
-    'Liar_trigram.npz',
-    'Liar_one_to_trigram.npz',
-    'Liar_TFIDF.npz',
-    'Liar_W2V.npz',
-    'Liar_bow_w2v.npz',
-    'Liar_enhanc_bow_w2v.npz',
-    'Liar_TFIDF_w2v.npz',
+#    'Liar_bow.npz',
+#    'Liar_one_gram.npz', # no svm
+    # 'Liar_bigram.npz',
+    # 'Liar_trigram.npz',
+    # 'Liar_one_to_trigram.npz',
+    # 'Liar_TFIDF.npz',
+    # 'Liar_W2V.npz',
+    # 'Liar_bow_w2v.npz',
+    # 'Liar_enhanc_bow_w2v.npz',
+    # 'Liar_TFIDF_w2v.npz', \\\\ error
     'Liar_enhance_TFIDF_w2v.npz'
     ]
 
@@ -301,50 +305,8 @@ for dt_lst, lbl in zip(dt_lsts, lbl_lst):
 # te.test()
 # print('*'* 500)
 
-import os 
-os.system("shutdown /s /t 200")
-'''
-
-['gossipcop_bow.npz',
- 'gossipcop_one_gram.npz',
- 'gossipcop_bigram.npz',
- 'gossipcop_trigram.npz',
- 'gossipcop_one_to_trigram.npz',
- 'gossipcop_TFIDF.npz',
- 'gossipcop_W2V.npz',
- 'gossipcop_bow_w2v.npz',
- 'gossipcop_enhanc_bow_w2v.npz',
- 'gossipcop_TFIDF_w2v.npz',
- 'gossipcop_enhance_TFIDF_w2v.npz']
-'''
-
-'''
-['PolitiFact_bow.npz',
- 'PolitiFact_one_gram.npz',
- 'PolitiFact_bigram.npz',
- 'PolitiFact_trigram.npz',
- 'PolitiFact_one_to_trigram.npz',
- 'PolitiFact_TFIDF.npz',
- 'PolitiFact_W2V.npz',
- 'PolitiFact_bow_w2v.npz',
- 'PolitiFact_enhanc_bow_w2v.npz',
- 'PolitiFact_TFIDF_w2v.npz',
- 'PolitiFact_enhance_TFIDF_w2v.npz']
-'''
-
-'''
-['Liar_bow.npz',
- 'Liar_one_gram.npz',
- 'Liar_bigram.npz',
- 'Liar_trigram.npz',
- 'Liar_one_to_trigram.npz',
- 'Liar_TFIDF.npz',
- 'Liar_W2V.npz',
- 'Liar_bow_w2v.npz',
- 'Liar_enhanc_bow_w2v.npz',
- 'Liar_TFIDF_w2v.npz',
- 'Liar_enhance_TFIDF_w2v.npz']
-'''
+# import os 
+# os.system("shutdown /s /t 200")
 
 
 '''

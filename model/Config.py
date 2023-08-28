@@ -16,7 +16,7 @@ class LogRegressionConfig(Enum):
    
           
 class SVCConfig(Enum):
-    ONE= {'kernel': "linear", 'degree': 3, 'gamma': "auto", 'probability': False},
+    ONE= {'kernel': "linear", 'degree': 3, 'gamma': "auto", 'probability': True},
     # TWO= {'kernel': "poly", 'degree': 3, 'gamma': "scale", 'probability': False},
     # THREE= {'kernel': "rbf", 'degree': 3, 'gamma': "scale", 'probability': False},
     # FOUR=  {'kernel': "sigmoid", 'degree': 3, 'gamma': "scale", 'probability': False},

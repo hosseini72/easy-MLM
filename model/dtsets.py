@@ -66,7 +66,19 @@ class DataSet:
             self.label= self.__read_sparse(self.label_adrs)
         elif self.label_extention == 'npy':
             self.label= self.__read_numpy(self.label_adrs)   
-        # split data to train and test         
+        #TODO then can be added to shrink dataset
+        # # decrease the dataset for svm ######********************************************************************************************************
+        self.data= self.data[:3500,:]  
+        self.label= self.label.head(3500)
+        from sklearn.feature_selection import VarianceThreshold
+        t= .8*(1-0.8)
+        v = VarianceThreshold(threshold= t)
+        self.data= v.fit_transform(self.data)
+        self.label= v.fit_transform(self.label)
+
+
+        # split data to train and test  
+
         if self.split_lst is None:
            self.split_lst = list(train_test_split(self.data, self.label, test_size=self.test_size, random_state=10))  # noqa: E501
 
@@ -79,7 +91,7 @@ class DataSet:
         if self.split_lst is None:
             self.test_train()
         data= self.split_lst[0]
-        label= self.split_lst[2].values.ravel()
+        label= self.split_lst[2]# .values.ravel() # in case of shrinking 
         return data, label
     
     @property
@@ -87,7 +99,7 @@ class DataSet:
         if self.split_lst is None:
             self.test_train()
         data= self.split_lst[1]
-        label= self.split_lst[3].values.ravel()
+        label= self.split_lst[3]# .values.ravel() 
         return data, label
 
 

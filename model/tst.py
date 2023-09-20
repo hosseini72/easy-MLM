@@ -1,3 +1,4 @@
+from typing import Any
 import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
@@ -42,10 +43,18 @@ import os
 # print(x)
 
 
-X_train= load_npz(r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\Liar_enhanc_bow_w2v.npz')
-print(type(X_train))
-if isinstance(X_train, sparse._csr.csr_matrix):
-    X_train= X_train.toarray()
-    print(type(X_train))
+# X_train= load_npz(r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\Liar_enhanc_bow_w2v.npz')
+# print(type(X_train))
+# if isinstance(X_train, sparse._csr.csr_matrix):
+#     X_train= X_train.toarray()
+#     print(type(X_train))
 
 
+class  A:
+    def show(self):
+        print('wj')
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        return self.show()
+    
+A().show()

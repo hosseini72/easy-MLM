@@ -1,4 +1,4 @@
-from model.models import *
+from model.models import LogRegression, DTModel, MLPClassifierModel, KNNModle,  NBModel, SVCModel  # noqa: E501
 from model.dtsets import DataSet
 import os
 from random import choice
@@ -61,7 +61,7 @@ class Train:
         model_dir= self.__make_model_dir(model=model)
         mdl_obj= model(model_dir, self.dataset)
         all_conf, conf_cuntr = mdl_obj.train()
-        print(f' The {model.__name__} trainning was just fineshed and the next model is going to be started...')
+        print(f' The {model.__name__} trainning was just fineshed and the next model is going to be started...')  # noqa: E501
         return all_conf, conf_cuntr
 
 
@@ -83,11 +83,11 @@ class Train:
     
     @models.setter
     def models(self, item):
-        raise Exception('These models are permanents and can not be changed. To run espesific model fit_one(model_name) can be used.')
+        raise Exception('These models are permanents and can not be changed. To run espesific model fit_one(model_name) can be used.')  # noqa: E501
 
     @models.deleter
     def models(self):
-        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) can be used.')
+        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) can be used.')  # noqa: E501
 
     @property
     def path(self):
@@ -98,11 +98,11 @@ class Train:
         if os.path.isdir(new_dir):
             self.__base_dir= new_dir
         else:
-            raise Exception('These models are permanents and can not be changed. To run espesific model fit_one(model_name) can be used.')
+            raise Exception('These models are permanents and can not be changed. To run espesific model fit_one(model_name) method can be used.')  # noqa: E501
 
     @path.deleter
     def path(self):
-        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) can be used.')
+        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) method can be used.')  # noqa: E501
 
     # passing dataset object to evaluation
     @property
@@ -247,7 +247,7 @@ def run(data_addr,  dataset_lst, label_dt):
 
 
 g_lst= [
-    # 'gossipcop_bow.npz',
+    'gossipcop_bow.npz',
     # 'gossipcop_one_gram.npz',
     # 'gossipcop_bigram.npz',
     # 'gossipcop_trigram.npz',
@@ -284,7 +284,7 @@ L_lst= [
     # 'Liar_bow_w2v.npz',
     # 'Liar_enhanc_bow_w2v.npz',
     # 'Liar_TFIDF_w2v.npz', \\\\ error
-    'Liar_enhance_TFIDF_w2v.npz'
+    # 'Liar_enhance_TFIDF_w2v.npz'
     ]
 
 dt_lsts= [g_lst,p_lst,L_lst]
@@ -296,14 +296,14 @@ for dt_lst, lbl in zip(dt_lsts, lbl_lst):
     label_dt= lbl
     )
 
-# tr= Train()
-# tr.set_dataset(data_address= r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_bow.npz',
-#             label_address=r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_label.csv')  # noqa: E501
-# tr.fit()
-# obj= tr.dataset_obj
-# te= Evaluate(models_dir=r'N:\MLM', data_obj= obj)
-# te.test()
-# print('*'* 500)
+    tr= Train()
+    tr.set_dataset(data_address= r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_bow.npz',
+                label_address=r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_label.csv')  # noqa: E501
+    tr.fit_one(SVCModel)
+    obj= tr.dataset_obj
+    te= Evaluate(models_dir=r'N:\MLM', data_obj= obj)
+    te.test()
+    print('*'* 500)
 
 # import os 
 # os.system("shutdown /s /t 200")

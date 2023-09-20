@@ -15,7 +15,6 @@ from abc import ABC, abstractmethod
 
 
 
-
 class Model(ABC):
 
     def __init__(self, dataset) -> None:
@@ -36,8 +35,7 @@ class Model(ABC):
         for _ in self.config_list:
             try:
                 config_name, config= self.__configure()
-                print(type(config))
-                trained_model= self.__make_model(config[0], self.dataset[0], self.dataset[1])
+                trained_model= self.__make_model(config[0], self.dataset[0], self.dataset[1])  # noqa: E501
                 model_counter +=1
                   
             except Exception as ex:
@@ -147,7 +145,7 @@ class SVCModel(Model):
 
 class DTModel(Model):
     '''
-"""A decision tree classifier.
+    A decision tree classifier.
 
     Parameters
     ----------

@@ -82,9 +82,6 @@ class DataSet:
         if self.split_lst is None:
            self.split_lst = list(train_test_split(self.data, self.label, test_size=self.test_size, random_state=10))  # noqa: E501
 
-    
-
-        
 
     @property
     def train_dataset(self):
@@ -107,11 +104,5 @@ class DataSet:
     def dataset_name(self):
         return  self.__dataset_name
 
-# class Random_dataset:
 
-#     @property
-#     def dataset(self):
-#         X,y= make_classification(n_samples= 100, n_features=3, n_informative=2, n_redundant=2, random_state=5)
-#         return {'X_train': X, 'y_train':y}
-    
 

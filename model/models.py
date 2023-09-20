@@ -75,8 +75,8 @@ class LogRegression(Model):
     multi_class: {'auto', 'ovr', 'multinomial'}
     '''
 
-    def __init__(self, model_dir, dataset) -> None:
-        super().__init__(dataset= dataset)
+    def __init__(self, model_dir, dataset) -> None:  #TODO we need to pass config here and use it in _Model__make_model method  only here # noqa: E501
+        super().__init__(dataset= dataset) 
         self.config_list= LogRegressionConfig.__members__  # noqa: F405
         self.config= iter(LogRegressionConfig)  # noqa: F405
         self.model_dir= model_dir

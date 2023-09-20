@@ -1,10 +1,14 @@
 from model.models import LogRegression, DTModel, MLPClassifierModel, KNNModle,  NBModel, SVCModel  # noqa: E501
+from sklearn.naive_bayes import GaussianNB
 from model.dtsets import DataSet
-import os
+from scipy import sparse 
 from random import choice
+from typing import Union, List, Tuple
+from pathlib import Path
 import pandas as pd
 import numpy as np
-
+import pickle
+import os
 from sklearn.metrics import confusion_matrix, multilabel_confusion_matrix
 from sklearn.metrics import accuracy_score,precision_score
 from sklearn.metrics import classification_report
@@ -16,10 +20,10 @@ from sklearn.metrics import hinge_loss
 This package can be helpful for model selection
 '''
 
-class Train:
-    def __init__(self):
-        self.__base_dir= os.getcwdb().decode()
-        self.__models= [LogRegression, DTModel, MLPClassifierModel, KNNModle,  NBModel, SVCModel] # noqa: E501
+class __Train:
+    def __init__(self, base_dir, models):
+        self.__base_dir= base_dir
+        self.__models= models 
         self.dataset= None
 
     def set_dataset(self, *, data_address, label_address, test_size=0.2 ):
@@ -59,7 +63,7 @@ class Train:
                              valid dataset by calling "set_dataset" method.''')
         self.dataset= self.__dataset_object.train_dataset
         model_dir= self.__make_model_dir(model=model)
-        mdl_obj= model(model_dir, self.dataset)
+        mdl_obj= model(model_dir, self.dataset)  #TODO here pass the config class 
         all_conf, conf_cuntr = mdl_obj.train()
         print(f' The {model.__name__} trainning was just fineshed and the next model is going to be started...')  # noqa: E501
         return all_conf, conf_cuntr
@@ -76,18 +80,6 @@ class Train:
             model= choice(self.__models)
         self.__run_single_model(model=model)
 
-    @property
-    def models(self):
-        models= [mdl.__name__ for mdl in self.__models]
-        return models
-    
-    @models.setter
-    def models(self, item):
-        raise Exception('These models are permanents and can not be changed. To run espesific model fit_one(model_name) can be used.')  # noqa: E501
-
-    @models.deleter
-    def models(self):
-        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) can be used.')  # noqa: E501
 
     @property
     def path(self):
@@ -111,7 +103,7 @@ class Train:
 
 
 
-class Evaluate:
+class __Evaluate:
     def __init__(self, *, models_dir,  data_obj) -> None:
         self.__path= models_dir
         self.__models_dir_list= iter(os.listdir(self.__path))
@@ -153,10 +145,7 @@ class Evaluate:
     def __evaluate(self, model_name, config_name, model):
         ##### tempory 
         if isinstance(model,GaussianNB) and isinstance(self.data, sparse._csr.csr_matrix):  # noqa: F405
-            print('we are going to change the data')
             self.data= self.data.toarray()
-            print('we changed the data')
-
         true_labels= self.target 
         predicted_labels= model.predict(self.data)
         predicted_probabilities= model.predict_proba(self.data)
@@ -205,45 +194,100 @@ class Evaluate:
         return result
     
 
-    def score(self):
-        # model_configs= self.__trained_models(mdl)
+class MLM:
+    __default_models= ['LogReg', 'DecisionTree', 'MLP', 'KNN',  'NaiveBase', 'SVC']  # noqa: E501
+    def __init__(self,*, data_dir: Union[str, Path], 
+                 data_set_list: Union[List, Tuple], models_list: List= [] ,
+                  label_dataset, result_path : Union[str, Path]= None) -> None:
+        # data_dir is the direcotory that datasets are in.
+        if data_dir is None or not (os.path.exists(data_dir) and os.path.isdir(data_dir)):  # noqa: E501:
+            raise ValueError('directory path of data sets should be passed.')
+        else:
+            self.data_addr= data_dir
+        # data_set_list is the list of datasets, if there is one dataset, it can be passed in list or tuple with single element  # noqa: E501
+        if data_set_list is None:
+            raise ValueError('datasets names should be passed in a list or a tuple.'
+                             'if there is one dataset, its name should be passed in '
+                             'a single member tuple or list.')
+        else:
+            self.data_set_list= data_set_list
+        # label_dataset is the name of label which are in other datasets direcotry
+        if label_dataset is None:
+            raise ValueError('Label data set in mandetory for training and the name of '
+                              'label data set should be passed.')
+        else:
+            self.label_dt= label_dataset
+        # models_list contain model(s) which are trained.
+        if MLM.__check_models_list(models_list) is None:
+            self.models_lst= MLM.__default_models # noqa: E501
+        else:
+            self.models_lst= models_list
 
-        for _ in range(5):
-            mdl= self.__model_directory
-            self.__trained_models(mdl)
-
-    def score_train(self):
-        pass
-
-
-    def roc_curve(self):
+        # base_dir is the direcotry that trained models will be stored in. 
+        if result_path is None or not (os.path.exists(result_path) and os.path.isdir(result_path)):  # noqa: E501
+            self.base_dir= os.getcwdb().decode() 
+        else:
+            self.base_dir= result_path
         
-        # from sklearn.metrics import roc_curve
-        # fpr, tpr, thresholds = roc_curve(true_labels, predicted_probabilities)
-        pass
+    @staticmethod
+    def __check_models_list(mdl_lst):
+        if mdl_lst is not None:  
+            for mdl in mdl_lst:
+                if mdl not in  MLM.__default_models:
+                    raise ValueError(f"the {mdl} is not one of models of this class."
+                                     "the models are:"
+                                     "{MLM.__default_models}")
+                    return None   
+        return mdl_lst
+    
+    @staticmethod
+    def __model_objects(mdl_lst):
+        mdl_dict= {
+            'LogReg': LogRegression, 
+            'DecisionTree': DTModel,
+            'MLP': MLPClassifierModel,
+            'KNN': KNNModle,
+            'NaiveBase': NBModel,
+            'SVC': SVCModel,
+            }
+        mdl_obj= [mdl_dict.get(mdl) for mdl in mdl_lst]
+        return mdl_obj
+    
+    def run(self):
+        for dataset in self.dataset_lst:
+            dt_adrs= os.path.join(self.data_addr, dataset)
+            lbl_adrs= os.path.join(self.data_addr, self.label_dt)
+            tr= __Train(self.base_dir, MLM.__model_objects(self.models_lst))
+            tr.set_dataset(data_address= dt_adrs,
+                        label_address=lbl_adrs)  
+            tr.fit()
+            obj= tr.dataset_obj
+            dt_name= obj.dataset_name
+            mdl_adr= os.path.join( self.base_dir, dt_name)
+            te= __Evaluate(models_dir=mdl_adr, data_obj= obj)
+            te.test()
+            del tr
+            del te
+
+    @property
+    def models(self):
+        print(f' there is/are {len(self.models_lst)} model(s):')
+        for i, model in enumerate(self.models_lst, start=1):
+            print(f'{i}: {model}')
+        return self.models_lst
+    
+    @models.setter
+    def models(self, item):
+        if MLM.__check_models_list(item) is not None:
+            self.models_lst= item
+
+    @models.deleter
+    def models(self):
+        raise Exception('These models are permanents and can not be deleted. To run espesific model fit_one(model_name) can be used.')  # noqa: E501
 
 
 
 
-def run(data_addr,  dataset_lst, label_dt):
-    for dataset in dataset_lst:
-        dt_adrs= os.path.join(data_addr, dataset)
-        lbl_adrs= os.path.join(data_addr, label_dt)
-        print(dt_adrs)
-        print(lbl_adrs)
-        tr= Train()
-        tr.set_dataset(data_address= dt_adrs,
-                    label_address=lbl_adrs)  # noqa: E501
-        tr.fit_one(SVCModel)
-        obj= tr.dataset_obj
-        dt_name= obj.dataset_name
-        mdl_adr= os.path.join(r'N:\MLM', dt_name)
-        print(mdl_adr)
-        te= Evaluate(models_dir=mdl_adr, data_obj= obj)
-        te.test()
-        print('*'* 500)
-        del tr
-        del te
 
 
 g_lst= [
@@ -296,12 +340,12 @@ for dt_lst, lbl in zip(dt_lsts, lbl_lst):
     label_dt= lbl
     )
 
-    tr= Train()
+    tr= __Train()
     tr.set_dataset(data_address= r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_bow.npz',
                 label_address=r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_label.csv')  # noqa: E501
     tr.fit_one(SVCModel)
     obj= tr.dataset_obj
-    te= Evaluate(models_dir=r'N:\MLM', data_obj= obj)
+    te= __Evaluate(models_dir=r'N:\MLM', data_obj= obj)
     te.test()
     print('*'* 500)
 

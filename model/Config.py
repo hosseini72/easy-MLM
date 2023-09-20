@@ -81,16 +81,23 @@ class ModelsConfig:
         self._custome_config= None
         self.config= EnumClass
 
-    def __call__(self, Config_dict: dict= None):
-        self._custome_config= Config_dict
+    def __call__(self):
         if self._custome_config is None:
             return self.config
         else:
-            return self.set_config()
+            return self.comput_config()
     
-    def set_config(self):
+    def set_new(self, config_dict: dict= None):
+        if config_dict is None:
+            raise AttributeError('a dictionary should be pass as argument')
+        self._custome_config= config_dict
+
+
+    def comput_config(self):
         iter_parms=[]
         iter_scalar= []
+        if self._custome_config is None:
+            raise AttributeError('a dictionary should be pass as argument')
         # Sorting parameters have a set of options and thoes have a scalar value
         for key,value in self._custome_config.items():
             try:

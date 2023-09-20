@@ -1,6 +1,12 @@
 from enum import Enum
 from itertools import product
 
+
+# __all__= ('log_regression_config', 'svc_onfig', 'dtc_onfig',
+#            'nbc_config', 'knn_config', 'mpl_config') 
+
+
+
 class LogRegressionConfigEnum(Enum):
     ONE= {'solver': "sag", 'penalty': "l2", 'multi_class': "auto", 'l1_ratio':0},
     TWO= {'solver': "saga", 'penalty': "l1", 'multi_class': "auto"},
@@ -71,7 +77,7 @@ class ModelsConfig:
     Abstract method class for changing default hyperparameters of classifiers
     '''
     def __init__(self, EnumClass, params) -> None:
-        self.params= params
+        self.__params= params
         self._custome_config= None
         self.config= EnumClass
 
@@ -109,102 +115,148 @@ class ModelsConfig:
         EnumConfigClass= Enum('EnumConfigClass', zip(name_list, config_lst))
         return EnumConfigClass
 
+    
 
     @property
     def parameters(self):
-        parms =   '''  
-        {
-        C : float, default=1.0
-        kernel : {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'} or callable,  
-        degree : int, default=3
-        gamma : {'scale', 'auto'} or float, default='scale'
-        coef0 : float, default=0.0
-        shrinking : {True, False}, default=True
-        probability : {True, False}, default=False
-        tol : float, default=1e-3
-        cache_size : float, default=200
-        class_weight : dict or 'balanced', default=None
-        verbose : {True, False}, default=False
-        max_iter : int, default=-1
-        decision_function_shape : {'ovo', 'ovr'}, default='ovr'
-        break_ties : {True, False}, default=False
-        random_state : int, RandomState instance or None, default=None
-        }
-    '''
-        return parms
+        return self.__params
         
     
-    # @parameters.setter
-    # def parameters(self):
-    #     raise AttributeError('Parameters can not be changed.')
+    @parameters.setter
+    def parameters(self):
+        raise AttributeError('Parameters can not be changed.')
     
-    # @parameters.deleter
-    # def parameters(self):
-    #     raise AttributeError('Parameters can not be deleted.')
+    @parameters.deleter
+    def parameters(self):
+        raise AttributeError('Parameters can not be deleted.')
     
 
-    @property
-    def param_sample(self):
-        parms =     {
-            'C' : 1.0,
-            'kernel' : {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'},  
-            'degree' : 3,
-            'gamma' : {'scale', 'auto'},
-            'coef0' : 0.0,
-            'shrinking' : {True, False},
-            'probability' : {True, False},
-            'tol' : 1e-3,
-            'cache_size' : 200,
-            'class_weight' : None,
-            'verbose' : {True, False},
-            'max_iter' : -1,
-            'decision_function_shape' : {'ovo', 'ovr'}, 
-            'break_ties' : {True, False}, 
-            'random_state' : 15,
-           }
-    
-        return parms
-    
-    
-    @param_sample.setter
-    def param_sample(self):
-        raise AttributeError('Parameters sample can not be changed. '
-                         'This is a sample to make neccessary changes by user. ')
-    
-    @param_sample.deleter
-    def param_sample(self):
-        raise AttributeError('Parameters sample can not be deleted. '
-                         'This is a sample to make neccessary changes by user. ')
-        
-
+      
 
 def log_regression_config():
-    parameters= {}
+    parameters= '''
+        {
+        'penalty': 'l2', # {'l1', 'l2', 'elasticnet', None}, default='l2
+        'dual': False, # {True, False}, default=False
+        'tol': 0.0001, # float, default=1e-4
+        'C': 1.0, #float, default=1.0
+        'fit_intercept': True, # {True, False}, default=True
+        'intercept_scaling': 1, # float, default=1
+        'class_weight': None, dict or 'balanced', default=None
+        'random_state': None, # int, RandomState instance, default=None
+        'solver': 'lbfgs', # {'lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga'}, default='lbfgs'
+        'max_iter': 100, # int, default=100
+        'multi_class': 'auto', # {'auto', 'ovr', 'multinomial'}, default='auto'
+        'verbose': 0, # int, default=0
+        'warm_start': False, # {True, False}, default=False
+        'n_jobs': None, # int, default=None 
+        'l1_ratio': None #  float, default=None
+        }
+        '''  
     obj= ModelsConfig(LogRegressionConfigEnum, parameters)
-    obj.
-
+    return obj
 
 def svc_onfig():
-    parameters= {}
+    parameters= '''  
+        {
+        'C' : float, default=1.0
+        'kernel' : {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}, # or callable
+        'degree' : int, default=3
+        'gamma' : {'scale', 'auto'}, # or float, default='scale'
+        'coef0' : float, # default=0.0
+        'shrinking' : {True, False}, # default=True
+        'probability' : {True, False}, # default=False
+        'tol' : float, # default=1e-3
+        'cache_size' : 200, # float, default=200
+        'class_weight' : None , # dict or 'balanced', default=None
+        'verbose' : {True, False}, # default=False
+        'max_iter' : -1,  # int, default=-1
+        'decision_function_shape' : {'ovo', 'ovr'}, # default='ovr'
+        'break_ties' : {True, False},  # default=False
+        'random_state' : 15,  # int, RandomState instance or None, default=None
+        }
+    '''
     obj= ModelsConfig(SVCConfigEnum, parameters)
+    return obj
 
 
 def dtc_onfig():
-    parameters= {}
+    parameters= '''
+    {
+    'criterion':'gini', # {"gini", "entropy", "log_loss"}, default="gini"
+    'splitter': 'best',  # {"best", "random"}, default="best"
+    'max_depth': None,   # int, default=None
+    'min_samples_split': 2, # int or float, default=2
+    'min_samples_leaf': 1,  # int or float, default=1
+    'min_weight_fraction_leaf': 0.0, # int or float, default=1
+    'max_features': None, # float, default=0.0
+    'random_state': None, # int, RandomState instance or None, default=None
+    'max_leaf_nodes': None, # int, default=None
+    'min_impurity_decrease': 0.0, #  float, default=0.0
+    'class_weight': None, # dict, list of dict or "balanced", default=None
+    'ccp_alpha': 0.0 # non-negative float, default=0.0
+    }
+    '''
     obj= ModelsConfig(DTConfigEnum, parameters)
+    return obj
 
 
 def nbc_config():
-    parameters= {}
+    parameters= '''
+    {
+     'priors': None, # array-like of shape (n_classes,), default=None
+     'var_smoothing': 1e-09 # float, default=1e-9
+    }
+    '''
     obj= ModelsConfig(NBConfigEnum, parameters)
+    return obj
 
 
 def knn_config():
-    parameters= {}
+    parameters= '''
+    {
+    'n_neighbors': 5, # int, default=5
+    'weights': 'uniform', # {'uniform', 'distance'}, callable or None, default='uniform'
+    'algorithm':'auto', # {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
+    'leaf_size': 30, # int, default=30
+    'p': 2, # int, default=30
+    'metric': 'minkowski', # str or callable, default='minkowski'
+    'metric_params': None, # dict, default=None
+    'n_jobs': None # int, default=None
+    }
+    '''
     obj= ModelsConfig(KNNConfigEnum, parameters )
+    return obj
 
 
 def mpl_config():
-    parameters= {}
+    parameters= '''
+    {
+    'hidden_layer_sizes': (100,), # array-like of shape(n_layers - 2,), default=(100,)
+    'activation': 'relu', # {'identity', 'logistic', 'tanh', 'relu'}, default='relu' or you can pass all acitivations
+    'solver': 'adam', #  {'lbfgs', 'sgd', 'adam'}, default='adam' or you can pass all solvers
+    'alpha': 0.0001, # float, default=0.0001
+    'batch_size': 'auto', # int, default='auto'
+    'learning_rate': 'constant', # {'constant', 'invscaling', 'adaptive'}, default='constant' or you can pass all rates
+    'learning_rate_init': 0.001, # float, default=0.001
+    'power_t': 0.5, # float, default=0.5
+    'max_iter': 200, # int, default=200
+    'shuffle': True, # {True, False}, default=True
+    'random_state': None, # int, RandomState instance, default=None
+    'tol': 0.0001, # float, default=1e-4
+    'verbose': False, # {True, False}, default=False
+    'warm_start': False, # {True, False}, default=False
+    'momentum': 0.9, # float, default=0.9
+    'nesterovs_momentum': True, # float, default=0.9
+    'early_stopping': False, # {True, False}, default=False
+    'validation_fraction': 0.1, #  float, default=0.1
+    'beta_1': 0.9, # float, default=0.9
+    'beta_2': 0.999, # float, default=0.999
+    'epsilon': 1e-08, # float, default=1e-8
+    'n_iter_no_change': 10, # int, default=10
+    'max_fun': 15000 #  int, default=15000
+    }
+    '''  # noqa: E501
     obj= ModelsConfig(MLPCConfigEnum, parameters)
+    return obj
 

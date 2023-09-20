@@ -4,10 +4,9 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn import metrics
 from scipy import sparse
 
-from model.Config import *  # noqa: F403
+from model.config import *  # noqa: F403
 # from model.dtsets import DataSet
 import pickle
 import os

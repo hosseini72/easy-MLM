@@ -7,7 +7,7 @@ from itertools import product
 
 
 
-class LogRegressionConfigEnum(Enum):
+class __LogRegressionConfigEnum(Enum):
     ONE= {'solver': "sag", 'penalty': "l2", 'multi_class': "auto", 'l1_ratio':0},
     TWO= {'solver': "saga", 'penalty': "l1", 'multi_class': "auto"},
     THREE= {'solver': "saga", 'penalty': "l2", 'multi_class': "auto"},
@@ -18,7 +18,7 @@ class LogRegressionConfigEnum(Enum):
     EIGHT= {'solver': "newton-cg", 'penalty': "l2", 'multi_class': "auto"},
 
           
-class SVCConfigEnum(Enum):
+class __SVCConfigEnum(Enum):
     ONE= {'kernel': "linear", 'degree': 3, 'gamma': "auto", 'probability': True},
     TWO= {'kernel': "poly", 'degree': 3, 'gamma': "scale", 'probability': False},
     THREE= {'kernel': "rbf", 'degree': 3, 'gamma': "scale", 'probability': False},
@@ -26,14 +26,14 @@ class SVCConfigEnum(Enum):
     FIVE=  {'kernel': "precomputed", 'degree': 3, 'gamma': "auto", 'probability': False}
 
 
-class DTConfigEnum(Enum):
+class __DTConfigEnum(Enum):
     ONE= {'criterion' : "gini", 'max_depth': 2, },
     TWO= {'criterion' : "entropy", 'max_depth': 2,},
     THREE= {'criterion' : "gini", 'max_depth': 3, },
     FOUR= {'criterion' : "entropy", 'max_depth': 3,},
 
 
-class NBConfigEnum(Enum):
+class __NBConfigEnum(Enum):
     ONE= {'priors': None, 'var_smoothing': 1e-9},
 
 
@@ -47,7 +47,7 @@ class KNNConfigEnum(Enum):
 
 
 
-class MLPCConfigEnum(Enum):
+class __MLPCConfigEnum(Enum):
     ONE= {'hidden_layer_sizes':(8,), 'activation': 'identity' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
     TWO= {'hidden_layer_sizes':(8,), 'activation': 'logistic' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
     THREE= {'hidden_layer_sizes':(8,), 'activation': 'tanh' , 'max_iter': 500, 'alpha': 1e-4, 'solver': 'lbfgs', 'random_state': 1,  'learning_rate_init': 0.1},
@@ -160,7 +160,7 @@ def log_regression_config():
         'l1_ratio': None #  float, default=None
         }
         '''  
-    obj= ModelsConfig(LogRegressionConfigEnum, parameters)
+    obj= ModelsConfig(__LogRegressionConfigEnum, parameters)
     return obj
 
 def svc_onfig():
@@ -183,7 +183,7 @@ def svc_onfig():
         'random_state' : 15,  # int, RandomState instance or None, default=None
         }
     '''
-    obj= ModelsConfig(SVCConfigEnum, parameters)
+    obj= ModelsConfig(__SVCConfigEnum, parameters)
     return obj
 
 
@@ -204,7 +204,7 @@ def dtc_onfig():
     'ccp_alpha': 0.0 # non-negative float, default=0.0
     }
     '''
-    obj= ModelsConfig(DTConfigEnum, parameters)
+    obj= ModelsConfig(__DTConfigEnum, parameters)
     return obj
 
 
@@ -215,7 +215,7 @@ def nbc_config():
      'var_smoothing': 1e-09 # float, default=1e-9
     }
     '''
-    obj= ModelsConfig(NBConfigEnum, parameters)
+    obj= ModelsConfig(__NBConfigEnum, parameters)
     return obj
 
 
@@ -264,6 +264,6 @@ def mpl_config():
     'max_fun': 15000 #  int, default=15000
     }
     '''  # noqa: E501
-    obj= ModelsConfig(MLPCConfigEnum, parameters)
+    obj= ModelsConfig(__MLPCConfigEnum, parameters)
     return obj
 

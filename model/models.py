@@ -6,7 +6,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from scipy import sparse
 
-from model.config import *  # noqa: F403
+# from .config import *  # noqa: F403
 # from model.dtsets import DataSet
 import pickle
 import os
@@ -75,10 +75,10 @@ class LogRegression(Model):
     multi_class: {'auto', 'ovr', 'multinomial'}
     '''
 
-    def __init__(self, model_dir, dataset) -> None:  #TODO we need to pass config here and use it in _Model__make_model method  only here # noqa: E501
+    def __init__(self, model_dir, dataset, config) -> None:  #TODO we need to pass config here and use it in _Model__make_model method  only here # noqa: E501
         super().__init__(dataset= dataset) 
-        self.config_list= LogRegressionConfig.__members__  # noqa: F405
-        self.config= iter(LogRegressionConfig)  # noqa: F405
+        self.config_list= config.__members__  # noqa: F405
+        self.config= iter(config)  # noqa: F405
         self.model_dir= model_dir
      
     
@@ -131,10 +131,10 @@ class SVCModel(Model):
         Array dimensions of training vector ``X``.
     '''
 
-    def __init__(self, model_dir, dataset) -> None:
+    def __init__(self, model_dir, dataset, config) -> None:
         super().__init__(dataset= dataset)
-        self.config_list= SVCConfig.__members__
-        self.config= iter(SVCConfig)
+        self.config_list= config.__members__
+        self.config= iter(config)
         self.model_dir= model_dir
 
     def _Model__make_model(self,conf, X_train, y_train):
@@ -172,10 +172,10 @@ class DTModel(Model):
     tree_ : Tree instance
     '''
 
-    def __init__(self, model_dir, dataset) -> None:
+    def __init__(self, model_dir, dataset, config) -> None:
         super().__init__(dataset= dataset)
-        self.config_list= DTConfig.__members__
-        self.config= iter(DTConfig)
+        self.config_list= config.__members__
+        self.config= iter(config)
         self.model_dir= model_dir
 
     def _Model__make_model(self,conf, X_train, y_train):
@@ -218,10 +218,10 @@ class NBModel(Model):
         mean of each feature per class.
     '''
 
-    def __init__(self, model_dir, dataset) -> None:
+    def __init__(self, model_dir, dataset, config) -> None:
         super().__init__(dataset= dataset)
-        self.config_list= NBConfig.__members__
-        self.config= iter(NBConfig)
+        self.config_list= config.__members__
+        self.config= iter(config)
         self.model_dir= model_dir
 
     def _Model__make_model(self,conf, X_train, y_train):
@@ -291,10 +291,10 @@ class MLPClassifierModel(Model):
     out_activation_ : str
         Name of the output activation function.
     '''
-    def __init__(self, model_dir, dataset) -> None:
+    def __init__(self, model_dir, dataset, config) -> None:
         super().__init__(dataset= dataset)
-        self.config_list= MLPCConfig.__members__
-        self.config= iter(MLPCConfig)
+        self.config_list= config.__members__
+        self.config= iter(config)
         self.model_dir= model_dir
 
     def _Model__make_model(self,conf, X_train, y_train):
@@ -340,10 +340,10 @@ class KNNModle(Model):
         otherwise True.
     '''
 
-    def __init__(self, model_dir, dataset) -> None:
+    def __init__(self, model_dir, dataset, config) -> None:
         super().__init__(dataset= dataset)
-        self.config_list= KNNConfig.__members__
-        self.config= iter(KNNConfig)
+        self.config_list= config.__members__
+        self.config= iter(config)
         self.model_dir= model_dir
 
     def _Model__make_model(self,conf, X_train, y_train):

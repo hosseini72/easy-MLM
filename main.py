@@ -1,4 +1,5 @@
 from model.models import LogRegression, DTModel, MLPClassifierModel, KNNModle,  NBModel, SVCModel  # noqa: E501
+from model.config import *
 from sklearn.naive_bayes import GaussianNB
 from model.dtsets import DataSet
 from scipy import sparse 
@@ -21,9 +22,12 @@ This package can be helpful for model selection
 '''
 
 class __Train:
-    def __init__(self, base_dir, models):
+    config_dict= {
+
+    }
+    def __init__(self, base_dir, models_obj):
         self.__base_dir= base_dir
-        self.__models= models 
+        self.__models_obj= models_obj
         self.dataset= None
 
     def set_dataset(self, *, data_address, label_address, test_size=0.2 ):
@@ -57,13 +61,13 @@ class __Train:
         return model_dir
 
 
-    def __run_single_model(self, model):
+    def __run_single_model(self, model, model_config):
         if self.__dataset_object is None:
             raise ValueError('''The dataset is not provided. Please make sure to pass a 
                              valid dataset by calling "set_dataset" method.''')
         self.dataset= self.__dataset_object.train_dataset
         model_dir= self.__make_model_dir(model=model)
-        mdl_obj= model(model_dir, self.dataset)  #TODO here pass the config class 
+        mdl_obj= model(model_dir, self.dataset, model_config)  #TODO here pass the config class 
         all_conf, conf_cuntr = mdl_obj.train()
         print(f' The {model.__name__} trainning was just fineshed and the next model is going to be started...')  # noqa: E501
         return all_conf, conf_cuntr
@@ -72,13 +76,13 @@ class __Train:
 
     def fit(self):
         ''' fit() trains all models and their configs once and save a pickled file in each model directory.'''  # noqa: E501
-        for model in self.__models:
-            self.__run_single_model(model=model)
+        for model, model_config in self.__models_obj.items():
+            self.__run_single_model(model, model_config)  # noqa: E999
     
     def fit_one(self, model= None):
         if not model:
-            model= choice(self.__models)
-        self.__run_single_model(model=model)
+            model= choice(self.__models_obj)
+        self.__run_single_model(model, self.__models_obj.get(model))
 
 
     @property
@@ -228,6 +232,21 @@ class MLM:
             self.base_dir= os.getcwdb().decode() 
         else:
             self.base_dir= result_path
+        # config parameters
+        self.LogReg= log_regression_config()
+        self.DecisionTree= dtc_onfig()
+        self.MLP= mpl_config()
+        self.KNN= knn_config()
+        self.NaiveBase= nbc_config()
+        self.SVC= svc_onfig()
+        self.models_config= {
+            'LogReg':  self.LogReg, 
+            'DecisionTree': self.DecisionTree, 
+            'MLP': self.MLP, 
+            'KNN':  self.KNN, 
+            'NaiveBase': self.NaiveBase,
+            'SVC':  self.SVC
+        }
         
     @staticmethod
     def __check_models_list(mdl_lst):
@@ -257,7 +276,7 @@ class MLM:
         for dataset in self.dataset_lst:
             dt_adrs= os.path.join(self.data_addr, dataset)
             lbl_adrs= os.path.join(self.data_addr, self.label_dt)
-            tr= __Train(self.base_dir, MLM.__model_objects(self.models_lst))
+            tr= __Train(self.base_dir, MLM.__model_objects(self.models_lst), self.models_config)  # noqa: E501
             tr.set_dataset(data_address= dt_adrs,
                         label_address=lbl_adrs)  
             tr.fit()
@@ -287,79 +306,3 @@ class MLM:
 
 
 
-
-
-
-g_lst= [
-    'gossipcop_bow.npz',
-    # 'gossipcop_one_gram.npz',
-    # 'gossipcop_bigram.npz',
-    # 'gossipcop_trigram.npz',
-    # 'gossipcop_one_to_trigram.npz',
-    # 'gossipcop_TFIDF.npz',
-    # 'gossipcop_W2V.npz',
-    # 'gossipcop_bow_w2v.npz',
-    # 'gossipcop_enhanc_bow_w2v.npz',
-    # 'gossipcop_TFIDF_w2v.npz',
-    # 'gossipcop_enhance_TFIDF_w2v.npz'
- ]
- 
-p_lst=[
-    # 'PolitiFact_bow.npz',
-    # 'PolitiFact_one_gram.npz',
-    # 'PolitiFact_bigram.npz',
-    # 'PolitiFact_trigram.npz',
-    # 'PolitiFact_one_to_trigram.npz', # till here has svm
-#     'PolitiFact_TFIDF.npz', # no svm
-#     'PolitiFact_W2V.npz',
-#     'PolitiFact_bow_w2v.npz',
-#     'PolitiFact_enhanc_bow_w2v.npz',
-#     'PolitiFact_TFIDF_w2v.npz',
-#     'PolitiFact_enhance_TFIDF_w2v.npz'
- ]
-L_lst= [
-#    'Liar_bow.npz',
-#    'Liar_one_gram.npz', # no svm
-    # 'Liar_bigram.npz',
-    # 'Liar_trigram.npz',
-    # 'Liar_one_to_trigram.npz',
-    # 'Liar_TFIDF.npz',
-    # 'Liar_W2V.npz',
-    # 'Liar_bow_w2v.npz',
-    # 'Liar_enhanc_bow_w2v.npz',
-    # 'Liar_TFIDF_w2v.npz', \\\\ error
-    # 'Liar_enhance_TFIDF_w2v.npz'
-    ]
-
-dt_lsts= [g_lst,p_lst,L_lst]
-lbl_lst=['gossipcop_label.csv', 'PolitiFact_label.csv', 'Liar_label.csv']
-
-for dt_lst, lbl in zip(dt_lsts, lbl_lst):
-    run(data_addr=r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data',
-    dataset_lst =dt_lst  , 
-    label_dt= lbl
-    )
-
-    tr= __Train()
-    tr.set_dataset(data_address= r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_bow.npz',
-                label_address=r'O:\Second Semister\dissertation\dis-dataset\GossioCop\train_data\gossipcop_label.csv')  # noqa: E501
-    tr.fit_one(SVCModel)
-    obj= tr.dataset_obj
-    te= __Evaluate(models_dir=r'N:\MLM', data_obj= obj)
-    te.test()
-    print('*'* 500)
-
-# import os 
-# os.system("shutdown /s /t 200")
-
-
-'''
-from mlxtend.plotting import plot_decision_regions
-plot_decision_regions(xtr, ytr, clf= ir, legend =2 )
-
-
-# predict 
-P = model.predict_proba(testX)
-clf.predict(xtest)
-clf.score(X, y)
-'''
